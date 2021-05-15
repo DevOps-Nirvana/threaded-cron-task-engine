@@ -2,8 +2,8 @@
 
 With 20+ years of experience as an DevOps Architect I found the need for an Cron/Task engine (similar to [supervisord](http://supervisord.org/)) that can run a process regularly on a schedule/interval that can...
 
-* Remember the previous interval it ran the script and continues to execute it properly on that schedule (laughing at supervisord)
-* Allows you to specify certain days/times of the day to "skip" running (pointing fingers at cron/supervisord)
+* Remember the previous interval it ran last and continues to execute it properly on that schedule
+* Allows you to specify certain days/times of the day to skip running (pointing fingers at cron/supervisord)
 * Detects and kills a child process if it runs too long (laughing at cron/supervisord)
 * Allows you to change into a specific directory before running (silly cron, tho can manually DiY this)
 * Guarantees it doesn't run a command more than once (I'm looking at you cron, have to hack around this)
