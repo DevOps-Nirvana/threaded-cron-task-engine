@@ -1,18 +1,17 @@
 # Multithreaded Cron/Task Engine
 
-This codebase from [Github](https://github.com/DevOps-Nirvana/threaded-cron-task-engine) fixes the following problem(s) I've encountered in the field of DevOps and automation...
+With 20+ years of experience as an DevOps Architect I found the need for an Cron/Task engine (similar to [supervisord](http://supervisord.org/)) that can run a process regularly on a schedule/interval that can...
 
-* Need a Cron/Task engine similar to supervisord/cron to run a process regularly on a schedule/interval that...
-* Remembers the previous interval it ran the script and continues to execute it properly on that schedule
-* Allows you to specify certain days/times of the day to "skip" running
+* Remember the previous interval it ran the script and continues to execute it properly on that schedule (laughing at supervisord)
+* Allows you to specify certain days/times of the day to "skip" running (pointing fingers at cron/supervisord)
 * Detects and kills a child process if it runs too long (laughing at cron/supervisord)
-* Allows you to change into a specific directory before running (silly cron)
-* Guarantees it doesn't run a command more than once (I'm looking at you cron)
-* Runs scripts with a full shell environment/tty (ahh cron you are painful)
-* Something super easy to setup, run, and maintain (_stares at supervisord_)
-* Have little or no dependencies on any system packages or libraries.  Aka, maximum portability
-* Can execute any language, script, executable easily
-* Runs reliably and the same way on every operating system
+* Allows you to change into a specific directory before running (silly cron, tho can manually DiY this)
+* Guarantees it doesn't run a command more than once (I'm looking at you cron, have to hack around this)
+* Runs scripts with a full shell environment/tty (ahh cron you are painful in this regard)
+* Something super easy to setup, run, and maintain (_stares at supervisord intently_)
+* Have little or no dependencies on any system packages or libraries, giving maximum portability
+* Can execute any language, script, executable easily as long as it can be executed by a shell command
+* Runs reliably and consistently on every operating system
 
 Honestly, with that list above, there isn't a tool out there that can do all, or most of those _well_, which simply disappoints me.
 
@@ -41,6 +40,7 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 * Package this and submit it to package repositories (Ubuntu/Debian/CentOS)
 * Alternatively, package and distribute this via pip
 * Do some/more Windows testing, add documentation and examples for Windows.  It _should_ work but the author is mainly an OS-X/Linux guy.
+* Write some tests for each of the various features to be sure it works and continues to work as intended
 * Others / Profit ???
 
 Note: With any of these above, consider the goal of this codebase is to stay simple to maintain.  If some of these would require pages and pages of code, unless it is deemed critical I would almost skip adding the feature.  I've just highlighted some desires that I will _possibly_ eventually implement in this codebase.
@@ -56,6 +56,12 @@ Note: With any of these above, consider the goal of this codebase is to stay sim
 
 This codebase in some form has been used in about a dozen companies over the last 10 years.  I've iterated on it and tweaked it over time, it currently proudly powers a few larger website's background task engines with ~40+ tasks running/scheduled concurrently with a ridiculous uptime.  I've been meaning to open-source it forever.
 
-# Support
+# Contributions
 
-Please file [issues on Github](https://github.com/DevOps-Nirvana/threaded-cron-task-engine/issues) or email me at _farley_ --AT-- **neonsurge** _dot_ COM.  The author (Farley) can be found on Github @ [AndrewFarley](http://github.com/andrewfarley).
+Please feel free to send Pull Requests, preferably filling one of the gaps of TODO or fixing a bug you've found.  Please follow a similar style, comment your code, add new info to the README, etc as necessary.  Feel free to ask questions via my email below, or submit an [issue](https://github.com/DevOps-Nirvana/threaded-cron-task-engine/issues).
+
+# Support / Author
+
+Written and supported exclusively by Farley Farley (and yes, that's my name).  I'm on Github @ [AndrewFarley](http://github.com/andrewfarley), LinkedIn @ [Mr-Farley](https://www.linkedin.com/in/mr-farley/), AngelList @ [Farley-Farley](https://angel.co/u/farley-farley) and via email _farley_ AT **neonsurge** _dot_ com
+
+Please file [issues on Github](https://github.com/DevOps-Nirvana/threaded-cron-task-engine/issues) or contact me on any platform above.  I'd be happy to hear of any success stories of yours with this, or your pain points with other systems that you think this tool might solve.
