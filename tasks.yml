@@ -1,0 +1,31 @@
+# This one will intentionally be killed when it hits the max runtime
+sleep-test-1:
+  command: echo "RUNTIME sleep-test-1 sleeping 20 seconds..." && sleep 20
+  interval: 10    # 10 seconds
+  max_runtime: 5  # 5 seconds
+
+# This one will exit gracefully before it hits the max runtime and show its return value
+sleep-test-2:
+  command: echo "RUNTIME sleep-test-2 sleeping 20 seconds..." && sleep 20
+  interval: 10    # 10 seconds
+  max_runtime: 30 # 30 seconds
+
+# This one has no max runtime, runs forever (until child script exits), simplest example
+sleep-test-3:
+  command: echo "RUNTIME sleep-test-3 sleeping 200000 seconds..." && sleep 200000
+  interval: 3600  # 1 hour
+
+# This one will only run before/after a certain hour
+sleep-test-4:
+  command: echo "RUNTIME sleep-test-4 sleeping 20 seconds..." && sleep 20
+  interval: 10    # 10 seconds
+  max_runtime: 30 # 30 seconds
+  # This will run between 4AM and 10AM
+  run_after: 4
+  run_before: 10
+
+# This one allows us to change directories into a folder before running, critical for some binaries to run properly
+sleep-test-5:
+  chdir: /tmp   # Use this to change directories before executing the script.  Critical for some executables, tools, etc.
+  command: echo "RUNTIME sleep-test-5 sleeping 20 seconds..." && sleep 20
+  interval: 30    # 30 seconds
