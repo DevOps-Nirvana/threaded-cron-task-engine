@@ -10,6 +10,7 @@ This codebase from [Github](https://github.com/DevOps-Nirvana/threaded-cron-task
 * Guarantees it doesn't run a command more than once (I'm looking at you cron)
 * Runs scripts with a full shell environment/tty (ahh cron you are painful)
 * Something super easy to setup, run, and maintain (_stares at supervisord_)
+* Have little or no dependencies on any system packages or libraries.  Aka, maximum portability
 * Can execute any language, script, executable easily
 * Runs reliably and the same way on every operating system
 
