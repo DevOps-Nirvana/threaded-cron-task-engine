@@ -5,11 +5,11 @@ This codebase from [Github](https://github.com/DevOps-Nirvana/threaded-cron-task
 * Need a Cron/Task engine similar to supervisord/cron to run a process regularly on a schedule/interval that...
 * Remembers the previous interval it ran the script and continues to execute it properly on that schedule
 * Allows you to specify certain days/times of the day to "skip" running
-* Detects and kills a child process if it runs too long (silly cron/supervisord)
+* Detects and kills a child process if it runs too long (laughing at cron/supervisord)
 * Allows you to change into a specific directory before running (silly cron)
 * Guarantees it doesn't run a command more than once (I'm looking at you cron)
-* Runs scripts with a full shell environment/tty (silly cron)
-* Something super easy to setup, run, and maintain
+* Runs scripts with a full shell environment/tty (ahh cron you are painful)
+* Something super easy to setup, run, and maintain (_stares at supervisord_)
 * Can execute any language, script, executable easily
 * Runs reliably and the same way on every operating system
 
@@ -23,7 +23,7 @@ The simplicity of this code also helps promote its support, usage, and adaptatio
 
 To get started simply install the requirements with `pip install pyyaml` or `pip install -r requirements.txt` and then `python3 run.py` or `./run.py`.  It should immediately start up and run on Linux/Mac.  On Windows you will need a different config file (todo, add an example for windows).
 
-To begin configuring the tasks you wish to run, please edit the tasks.yml file and add the commands you wish to run.  The file is well documented and self explanatory.  Put in the tasks you wish to add, and re-run `run.py` and watch it work.
+To begin configuring the tasks you wish to run, please edit the `tasks.yml` file and add the commands you wish to run.  The file is well documented and self explanatory.  Put in the tasks you wish to add, and re-run `run.py` and watch it work.
 
 I would recommend installing this somewhere in your system.  Perhaps by running `cp run.py /usr/local/bin/threaded-cron-engine && chmod a+x /usr/local/bin/threaded-cron-engine`.  A simply way to run this might be to run this in a `session` in Linux so you can detach from it and it runs forever.  Alternatively, you may want to ensure it is running and runs on boot with an init script specific to your system, or (amusingly) run it via Supervisord.  For the purposes of this codebase, at this time, I am not adding any init/boot-like scripts, although if some contributor took the time to write some really good ones, I wouldn't turn down a Pull Request.
 
@@ -36,6 +36,10 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 * Add detection of duplication of execution of this script.  Shouldn't be able to run twice (in the same folder/config?) (localhost port listener?)
 * Add ability to query/tweak/restart a specific child process (similar to supervisor_ctl commands) and leave the others untouched
 * Make "before/after" also support a date and datetime format instead of just an "hour before/after", detect the format and use accordingly
+* Make init script(s) for some popular Linux distributions
+* Package this and submit it to package repositories (Ubuntu/Debian/CentOS)
+* Alternatively, package and distribute this via pip
+* Do some/more Windows testing, add documentation and examples for Windows.  It _should_ work but the author is mainly an OS-X/Linux guy.
 * Others / Profit ???
 
 Note: With any of these above, consider the goal of this codebase is to stay simple to maintain.  If some of these would require pages and pages of code, unless it is deemed critical I would almost skip adding the feature.  I've just highlighted some desires that I will _possibly_ eventually implement in this codebase.
@@ -45,12 +49,12 @@ Note: With any of these above, consider the goal of this codebase is to stay sim
 * (FINALLY) Published the code as Open Source Software on Github after many years of it laying around
 * Documented and cleaned up the codebase, added this awesome readme
 * Integrated the max_runtime feature directly into the codebase instead of being an (annoying) helper script
-* Making a few variables configurable via env vars making it easier to Dockerize
+* Making a few variables configurable via env vars making it easier to Dockerize in the future
 
 # History
 
-This codebase in some form has been used in about a dozen companies over the last 10 years.  I've iterated on it and tweaked it over time, it currently proudly powers a few larger website's background task engines with ~40+ tasks running/scheduled concurrently with a ridiculous uptime.  I've been meaning to open-source it forever, it's basically "been" open source already just not published.  But finally!
+This codebase in some form has been used in about a dozen companies over the last 10 years.  I've iterated on it and tweaked it over time, it currently proudly powers a few larger website's background task engines with ~40+ tasks running/scheduled concurrently with a ridiculous uptime.  I've been meaning to open-source it forever.
 
 # Support
 
-Please file [issues on Github](https://github.com/DevOps-Nirvana/threaded-cron-task-engine/issues) or email me at _farley_ --AT-- **neonsurge** _dot_ COM.  I can be found on Github called [AndrewFarley](http://github.com/andrewfarley) but my legal name is Farley now.   
+Please file [issues on Github](https://github.com/DevOps-Nirvana/threaded-cron-task-engine/issues) or email me at _farley_ --AT-- **neonsurge** _dot_ COM.  The author (Farley) can be found on Github @ [AndrewFarley](http://github.com/andrewfarley).
