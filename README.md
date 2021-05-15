@@ -31,12 +31,14 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 
 * Add metrics?  (Prometheus?)
 * Dockerize and publish this into Docker Hub, making it easy(ier) for others to integrate and build off of (related to adding Prometheus metrics)
-* Allow signaling via HUP to reload the config
+* Allow signaling via HUP to reload the config and only change/restart changed threads.
 * Instead-of the hard-kill that occurs now when you CTRL-C, allow catching of signals to parent thread and (optionally?) pass down into threads
-* Add detection of duplication of execution of this script.  Shouldn't be able to run twice (in the same folder/config?)
+* Add detection of duplication of execution of this script.  Shouldn't be able to run twice (in the same folder/config?) (localhost port listener?)
 * Add ability to query/tweak/restart a specific child process (similar to supervisor_ctl commands) and leave the others untouched
 * Make "before/after" also support a date and datetime format instead of just an "hour before/after", detect the format and use accordingly
 * Others / Profit ???
+
+Note: With any of these above, consider the goal of this codebase is to stay simple to maintain.  If some of these would require pages and pages of code, unless it is deemed critical I would almost skip adding the feature.  I've just highlighted some desires that I will _possibly_ eventually implement in this codebase.
 
 # DONE
 
