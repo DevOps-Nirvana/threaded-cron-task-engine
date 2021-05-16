@@ -41,6 +41,7 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 * Alternatively, package and distribute this via pip
 * Do some/more Windows testing, add documentation and examples for Windows.  It _should_ work but the author is mainly an OS-X/Linux guy.
 * Write some tests for each of the various features to be sure it works and continues to work as intended
+* Make all logs pre-thread have a forced prefix?  Would need to buffer output to accomplish this, and it might break some output data formats especially multi-line ones (eg: JSON, or a stacktrace)
 * Others / Profit ???
 
 Note: With any of these above, consider the goal of this codebase is to stay simple to maintain.  If some of these would require pages and pages of code, unless it is deemed critical I would almost skip adding the feature.  I've just highlighted some desires that I will _possibly_ eventually implement in this codebase.

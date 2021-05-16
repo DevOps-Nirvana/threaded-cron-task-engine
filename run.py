@@ -56,6 +56,7 @@ def checkIfBetweenHours(start=None, end=None):
     else:
         return (True)
 
+
 # Our main worker thread that does all the magic
 def worker(label, command, interval, start=None, end=None, chdir=None, max_runtime=None):
     """thread worker function"""
@@ -73,17 +74,16 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
             print("{}: got last run {}".format(label, last_run))
     except:
         print("{}: setting new last run".format(label))
-        last_run = 999999999999
+        last_run = 0
         f = open(tmpfile_path, 'w')
         print(str(last_run), file=f)
         f.close()
-
 
     print("{}: Worker main loop launched...".format(label))
     while True:
 
         # Wait until the interval has passed...
-        print("{}: Waiting for interval started...".format(label))
+        print("{}: Waiting for interval started, must wait another {} seconds".format(label, last_run - (int(time.time()) - int(interval))))
         while last_run > int(time.time()) - int(interval):
             # print("{}: Waiting for interval...".format(label))
             time.sleep(1)
@@ -96,16 +96,17 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
 
         # Check if in operating hours (or none specified) then run the requested command...
         if checkIfBetweenHours(start, end):
-            print("{}: Running command...".format(label))
             myproc = Popen(command, shell=True)
             # If we have max runtime specified, then make this command timeout...
             if max_runtime != None:
                 try:
-                    myproc.wait(max_runtime)
+                    print("{}: Running command with timeout at {} seconds...".format(label, max_runtime))
+                    myproc.wait(int(max_runtime))
                 except TimeoutExpired as e:
                     print("{}: Command reached max_runtime, force killing...".format(label))
                     myproc.kill()
             else:
+                print("{}: Running command with no timeout...".format(label))
                 myproc.wait()  # Wait forever if not max runtime specified
             print("{}: Command completed with exit code {}".format(label, myproc.returncode))
         else:
@@ -121,7 +122,6 @@ for key,value in jobs.items():
         raise Exception("Error in {}: Command not specified".format(key))
     if 'interval' not in value:
         raise Exception("Error in {}: Interval not specified".format(key))
-
 
     # Input validation (optional inputs)
     if 'run_after' not in value:
