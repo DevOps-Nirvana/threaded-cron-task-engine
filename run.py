@@ -83,7 +83,7 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
     while True:
 
         # Wait until the interval has passed...
-        print("{}: Waiting for interval started, must wait another {} seconds".format(label, last_run - (int(time.time()) - int(interval))))
+        print("{}: Waiting for interval {}, must wait another {} seconds...".format(label, interval, last_run - (int(time.time()) - int(interval))))
         while last_run > int(time.time()) - int(interval):
             # print("{}: Waiting for interval...".format(label))
             time.sleep(1)

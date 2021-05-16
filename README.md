@@ -30,6 +30,7 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 # TODO
 
 * Add metrics?  (Prometheus?)
+* Add more/some Try/Catch-es to ensure/maximize uptime?  Just incase?  Right now if there's an issue in the script it fatal errors the whole process, but the script is simple enough this _should_ never occur.  I kind-of like it failing at the moment for fatal issues, makes it obvious during development if something is broken.  This won't happen ever in any child-ran subtask.  Those can crash all they want.
 * Dockerize and publish this into Docker Hub, making it easy(ier) for others to integrate and build off of (related to adding Prometheus metrics)
 * Allow signaling via HUP to reload the config and only change/restart changed threads.
 * Instead-of the hard-kill that occurs now when you CTRL-C, allow catching of signals to parent thread and (optionally?) pass down into threads
