@@ -148,3 +148,6 @@ for key,value in jobs.items():
     )
     threads.append(t)
     t.start()
+    
+    # To prevent flooding of our system, sleep 1 second between new thread creations, just incase
+    time.sleep(1)
