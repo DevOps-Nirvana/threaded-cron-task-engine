@@ -3,6 +3,7 @@ from __future__ import print_function
 from subprocess import Popen, TimeoutExpired
 import threading
 import datetime
+import signal
 import time
 import yaml
 import os
@@ -96,7 +97,7 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
 
         # Check if in operating hours (or none specified) then run the requested command...
         if checkIfBetweenHours(start, end):
-            myproc = Popen(command, shell=True)
+            myproc = Popen(command, start_new_session=True, shell=True)
             # If we have max runtime specified, then make this command timeout...
             if max_runtime != None:
                 try:
@@ -104,7 +105,13 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
                     myproc.wait(int(max_runtime))
                 except TimeoutExpired as e:
                     print("{}: Command reached max_runtime, force killing...".format(label))
-                    myproc.kill()
+                    os.killpg(os.getpgid(myproc.pid), signal.SIGTERM)    # Send a signal to kill the entire process group (sub-shell)
+                    time.sleep(1)                                        # Wait just incase for clean exit
+                    try:
+                        myproc.kill()                                        # Send kill to the parent
+                        outs, errs = myproc.communicate()                    # "Hack" to cleanup by communicating (uselessly) to the subprocess
+                    except:
+                        pass
             else:
                 print("{}: Running command with no timeout...".format(label))
                 myproc.wait()  # Wait forever if not max runtime specified
