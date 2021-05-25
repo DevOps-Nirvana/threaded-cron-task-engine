@@ -19,7 +19,7 @@ After wrestling with similar tools in this space with gaps left, I felt I needed
 
 The simplicity of this code also helps promote its support, usage, and adaptation.  I encourage you to take this code and tweak it to do whatever you want!  If it makes sense send me a Pull Request, and I'll consider accepting it, although the goal of this project directly is to stay _dead simple_ over adding tons and tons of features.  I do not want this to become SupervisorD and be impossible to maintain.
 
-# Usage
+# Usage (Installation)
 
 To get started simply install the requirements with `pip install pyyaml` or `pip install -r requirements.txt` and then `python3 run.py` or `./run.py`.  It should immediately start up and run on Linux/Mac.  On Windows you will need a different config file (todo, add an example for windows).
 
@@ -27,8 +27,51 @@ To begin configuring the tasks you wish to run, please edit the `tasks.yml` file
 
 I would recommend installing this somewhere in your system.  Perhaps by running `cp run.py /usr/local/bin/threaded-cron-engine && chmod a+x /usr/local/bin/threaded-cron-engine`.  A simply way to run this might be to run this in a `session` in Linux so you can detach from it and it runs forever.  Alternatively, you may want to ensure it is running and runs on boot with an init script specific to your system, or (amusingly) run it via Supervisord.  For the purposes of this codebase, at this time, I am not adding any init/boot-like scripts, although if some contributor took the time to write some really good ones, I wouldn't turn down a Pull Request.
 
+# Usage (Runtime)
+
+To make it easy for dockerization, there's some environment variables present to configure this.
+`TMPDIR` == The directory to store the "lastrun" files, to know when each task last run successfully
+`CONFIGPATH` == The path to the tasks.yml file, can be absolute or relative (to cwd)
+
+Example:
+```
+export TMPDIR=/tasks
+export CONFIGPATH=/app/tasks.yml
+/usr/local/bin/threaded-cron-engine.py
+```
+
+# Example Docker Integration
+
+To add this to an existing docker container to run some background tasks, assuming an `ubnutu:latest` container would be to add the following to your Dockerfile.
+
+```
+FROM ubuntu:latest
+
+### Install our threaded cron task engine
+RUN apt-get update && \
+# Get Python3 Pre-Installed (for some scripting and automation)
+    apt-get install python3 python3-pip wget -y && \
+    pip3 install pyyaml && \
+# Install our task manager
+    wget https://github.com/DevOps-Nirvana/threaded-cron-task-engine/releases/download/v1.0.1/run.py -O /usr/local/bin/threaded-cron-task-engine.py && \
+    chmod a+x /usr/local/bin/threaded-cron-task-engine.py && \
+# Final cleanup
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -Rf /tmp/*
+
+WORKDIR /app
+COPY tasks.yml /app/tasks.yml
+COPY * /app/
+
+ENTRYPOINT ["/usr/local/bin/threaded-cron-task-engine.py"]
+```
+
+To this above Docker image you will install the threaded engine, then add your codebase-specific tasks.yml file to define the tasks to run, and then specify our entrypoint to start up our engine
+
 # TODO
 
+* Add ability to set environment variables (per task)
 * Add metrics?  (Prometheus?)
 * Add more/some Try/Catch-es to ensure/maximize uptime?  Just incase?  Right now if there's an issue in the script it fatal errors the whole process, but the script is simple enough this _should_ never occur.  I kind-of like it failing at the moment for fatal issues, makes it obvious during development if something is broken.  This won't happen ever in any child-ran subtask.  Those can crash all they want.
 * Dockerize and publish this into Docker Hub, making it easy(ier) for others to integrate and build off of (related to adding Prometheus metrics)
@@ -37,6 +80,7 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 * Add detection of duplication of execution of this script.  Shouldn't be able to run twice (in the same folder/config?) (localhost port listener?)
 * Add ability to query/tweak/restart a specific child process (similar to supervisor_ctl commands) and leave the others untouched
 * Make "before/after" also support a date and datetime format instead of just an "hour before/after", detect the format and use accordingly
+* Add ability to specify in a crontab-like format alternatively...?  (Maybe?  idk, I don't like this idea though)
 * Make init script(s) for some popular Linux distributions
 * Package this and submit it to package repositories (Ubuntu/Debian/CentOS)
 * Alternatively, package and distribute this via pip
@@ -45,7 +89,7 @@ I would recommend installing this somewhere in your system.  Perhaps by running 
 * Make all logs pre-thread have a forced prefix?  Would need to buffer output to accomplish this, and it might break some output data formats especially multi-line ones (eg: JSON, or a stacktrace)
 * Others / Profit ???
 
-Note: With any of these above, consider the goal of this codebase is to stay simple to maintain.  If some of these would require pages and pages of code, unless it is deemed critical I would almost skip adding the feature.  I've just highlighted some desires that I will _possibly_ eventually implement in this codebase.
+Note: With any of these above, consider the goal of this codebase is to stay simple to maintain.  If some of these would require pages and pages of code, unless it is deemed critical I would almost skip adding the feature.  I've just highlighted some desires that I will _possibly_ eventually implement in this codebase, or you're welcome to try.
 
 # DONE
 

@@ -13,21 +13,28 @@ import os
 # Configuration Variables
 ##########################
 
-# Tmpdir (Must END in /)
-tmpdir = "/tmp/"
-try:
-    tmpdir = os.environ['TMPDIR']
-except:
-    pass
+def readEnvOrDefault(envname, default=False):
+    try:
+        return os.environ[envname]
+    except:
+        return default
 
-# Config file path, defining our tasks to run
-configpath = "./tasks.yml"
+# Tmpdir, this MUST end in /
+tmpdir = readEnvOrDefault('TMPDIR', '/tmp/')
+# To prevent flooding, sleep this amount between launching threads
+thread_launch_interval = int(readEnvOrDefault('THREADLAUNCHINTERVAL', '1'))
+# Config file path, defining our tasks to run, default to cwd tasks.yml file
+configpath = readEnvOrDefault('CONFIGPATH', './tasks.yml')
+# Open our configuration file to load our job configuration
 try:
-    configpath = os.environ['CONFIGPATH']
+    with open(configpath, 'r') as stream:
+        try:
+            jobs = yaml.load(stream, Loader=yaml.FullLoader)
+        except:
+            jobs = yaml.load(stream) # This is a fallback to using an older pyyaml without the security patch
 except:
-    pass    
-with open(configpath, 'r') as stream:
-    jobs = yaml.load(stream, Loader=yaml.FullLoader)
+    print("Fatal error: Unable to read or parse {}".format(configpath))
+    raise 
 
 
 ###################
@@ -105,11 +112,11 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
                     myproc.wait(int(max_runtime))
                 except TimeoutExpired as e:
                     print("{}: Command reached max_runtime, force killing...".format(label))
-                    os.killpg(os.getpgid(myproc.pid), signal.SIGTERM)    # Send a signal to kill the entire process group (sub-shell)
-                    time.sleep(1)                                        # Wait just incase for clean exit
                     try:
-                        myproc.kill()                                        # Send kill to the parent
-                        outs, errs = myproc.communicate()                    # "Hack" to cleanup by communicating (uselessly) to the subprocess
+                        os.killpg(os.getpgid(myproc.pid), signal.SIGTERM)  # Send a signal to kill the entire process group (sub-shell)
+                        time.sleep(1)                                      # Wait just incase for clean exit
+                        # myproc.kill()                                      # Send force kill to the parent if the TERM didn't kill it (this can cause zombies, skipping)
+                        outs, errs = myproc.communicate()                  # "Hack" to clean zombies communicating (uselessly) to the subprocess
                     except:
                         pass
             else:
@@ -157,4 +164,4 @@ for key,value in jobs.items():
     t.start()
     
     # To prevent flooding of our system, sleep 1 second between new thread creations, just incase
-    time.sleep(1)
+    time.sleep(thread_launch_interval)
