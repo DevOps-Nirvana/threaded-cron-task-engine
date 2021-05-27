@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import print_function
 from subprocess import Popen, TimeoutExpired
+from pathlib import Path
 import threading
+import platform
+import tempfile
 import datetime
 import signal
 import time
@@ -20,11 +23,12 @@ def readEnvOrDefault(envname, default=False):
         return default
 
 # Tmpdir, this MUST end in /
-tmpdir = readEnvOrDefault('TMPDIR', '/tmp/')
+system_tempdir = Path("/tmp" if platform.system() == "Darwin" else tempfile.gettempdir())
+tmpdir = readEnvOrDefault('TMPDIR', system_tempdir)
 # To prevent flooding, sleep this amount between launching threads
 thread_launch_interval = int(readEnvOrDefault('THREADLAUNCHINTERVAL', '1'))
 # Config file path, defining our tasks to run, default to cwd tasks.yml file
-configpath = readEnvOrDefault('CONFIGPATH', './tasks.yml')
+configpath = readEnvOrDefault('CONFIGPATH', 'tasks.yml')
 # Open our configuration file to load our job configuration
 try:
     with open(configpath, 'r') as stream:
@@ -34,7 +38,7 @@ try:
             jobs = yaml.load(stream) # This is a fallback to using an older pyyaml without the security patch
 except:
     print("Fatal error: Unable to read or parse {}".format(configpath))
-    raise 
+    raise
 
 
 ###################
@@ -70,7 +74,7 @@ def worker(label, command, interval, start=None, end=None, chdir=None, max_runti
     """thread worker function"""
     print('{}: Worker started for in interval {}'.format(label, interval))
     tmpfile_path = "{}{}.lastrun".format(tmpdir,label)
-    
+
     if chdir is not None:
         print('{}: Worker chdir {}'.format(label, chdir))
         os.chdir(chdir)
@@ -162,6 +166,6 @@ for key,value in jobs.items():
     )
     threads.append(t)
     t.start()
-    
+
     # To prevent flooding of our system, sleep 1 second between new thread creations, just incase
     time.sleep(thread_launch_interval)

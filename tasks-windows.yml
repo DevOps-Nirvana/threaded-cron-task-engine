@@ -1,0 +1,11 @@
+# Simple windows-specific examples
+test-1:
+  command: echo "test-1 run"
+  interval: 6    # 10 seconds
+  max_runtime: 3  # 5 seconds
+
+# This one has no max runtime, runs forever (until child script exits), simplest example
+chdir-test:
+  chdir: C:\Users
+  command: echo "chdir test ok"
+  interval: 3600  # 1 hour

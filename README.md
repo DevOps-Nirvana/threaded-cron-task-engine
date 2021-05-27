@@ -21,7 +21,7 @@ The simplicity of this code also helps promote its support, usage, and adaptatio
 
 # Usage (Installation)
 
-To get started simply install the requirements with `pip install pyyaml` or `pip install -r requirements.txt` and then `python3 run.py` or `./run.py`.  It should immediately start up and run on Linux/Mac.  On Windows you will need a different config file (todo, add an example for windows).
+To get started simply install the requirements with `pip install pyyaml` or `pip install -r requirements.txt` and then `python3 run.py` or `./run.py`.  It should immediately start up and run on Linux/Mac.  On Windows you will need an slightly different config file, basically just use Windows-specific paths for chdir.  See `tasks-windows.yml`.  Also on Windows CTRL-C doesn't always kill the entire engine and all children.  You may need to force-kill the process from the task manager, or simply close the window if you ran it in an Windows Command Prompt/shell.
 
 To begin configuring the tasks you wish to run, please edit the `tasks.yml` file and add the commands you wish to run.  The file is well documented and self explanatory.  Put in the tasks you wish to add, and re-run `run.py` and watch it work.
 
@@ -84,7 +84,6 @@ To this above Docker image you will install the threaded engine, then add your c
 * Make init script(s) for some popular Linux distributions
 * Package this and submit it to package repositories (Ubuntu/Debian/CentOS)
 * Alternatively, package and distribute this via pip
-* Do some/more Windows testing, add documentation and examples for Windows.  It _should_ work but the author is mainly an OS-X/Linux guy.
 * Write some tests for each of the various features to be sure it works and continues to work as intended
 * Make all logs pre-thread have a forced prefix?  Would need to buffer output to accomplish this, and it might break some output data formats especially multi-line ones (eg: JSON, or a stacktrace)
 * Others / Profit ???
@@ -97,6 +96,7 @@ Note: With any of these above, consider the goal of this codebase is to stay sim
 * Documented and cleaned up the codebase, added this awesome readme
 * Integrated the max_runtime feature directly into the codebase instead of being an (annoying) helper script
 * Making a few variables configurable via env vars making it easier to Dockerize in the future
+* Do some/more Windows testing, add documentation and examples for Windows.
 
 # History
 
